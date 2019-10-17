@@ -2,6 +2,10 @@ package sample.Vistas;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -9,11 +13,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sample.MainForm;
 import sample.Pruebas;
 import sample.Pseudoaleatorios;
+
+import java.util.ArrayList;
 
 public class Histograma {
     private final int cantidad;
@@ -67,18 +72,103 @@ public class Histograma {
 
     private HBox crearBody() {
         HBox bodyHbox = new HBox();
-        VBox tableBox = new VBox();
-        VBox histBox = new VBox();
-        Label tableTitle = new Label("Datos generados");
-        Label histoTitle = new Label("Histograma");
-        tableBox.getChildren().addAll(tableTitle, crearTabla());
-        histBox.getChildren().add(histoTitle);
+        bodyHbox.setId("data-container");
+        //bodyHbox.setStyle("-fx-max-width: 100%; -fx-pref-width: 100%;; -fx-pref-height: 100%; -fx-max-height: 100%");
+        HBox tableBox = new HBox();
+        HBox histBox = new HBox();
+        tableBox.getChildren().add(crearTabla());
+        tableBox.setId("table-data-box");
+        histBox.getChildren().add(crearHistograma());
+        histBox.setId("histo-box");
         bodyHbox.getChildren().addAll(tableBox, histBox);
         return bodyHbox;
     }
 
+    private HBox crearHistograma() {
+        HBox histogramaContainer = new HBox();
+        histogramaContainer.setId("semana-chart-container");
+
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart<String, Number> barChart = new BarChart<>(xAxis,yAxis);
+        barChart.setCategoryGap(0);
+        barChart.setBarGap(0);
+        barChart.setTitle("Histograma");
+
+        xAxis.setLabel("Range");
+        yAxis.setLabel("Population");
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Histograma");
+
+        int n = numerosList.size();
+        ObservableList banderaList = numerosList;
+        int m = (int) Math.sqrt(n);
+        double intervalo = 1.0/m;
+        double liminf = 0.0;
+        double limsup = intervalo;
+        ArrayList<ArrayList<Double>> group = new ArrayList<>();
+        Range[] rangeGroups = new Range[m];
+
+        for (int i = 0; i < m; i++) {
+            System.out.println(liminf + " " + limsup);
+            rangeGroups[i] = new Range(liminf, limsup);
+            liminf = limsup + 0.0001;
+            limsup = limsup+intervalo;
+        }
+
+        // Iterate numbers
+        for (int i = 0; i < n; i++) {
+            boolean checksum = false;
+            double ri = numerosList.get(i).getRi();
+            // Explore ranges
+            for (int j = 0; j < m; j++) {
+                group.add(j, new ArrayList<Double>());
+                if(rangeGroups[j].contains(ri)) {
+                    group.get(j).add(ri);
+                    checksum = true;
+                    break;
+                }
+            }
+            if(!checksum) {
+                System.out.println("Ri: "+ ri + " i: " + i);
+                System.exit(0);
+            }
+        }
+
+        for(int i = 0; i < m; i++) {
+            series.getData().add(new XYChart.Data(rangeGroups[i].toRangeString(), group.get(i).toArray().length));
+        }
+
+        barChart.getData().addAll(series);
+        histogramaContainer.getChildren().add(barChart);
+
+        return histogramaContainer;
+    }
+
+    public class Range
+    {
+        private double low;
+        private double high;
+
+        public Range(double low, double high){
+            this.low = low;
+            this.high = high;
+        }
+
+        public boolean contains(double number){
+            return (number >= low && number <= high);
+        }
+
+        public String toRangeString() {
+            String rangeString = low + "-" + high;
+            return rangeString;
+        }
+    }
+
     private TableView crearTabla() {
         TableView numeros = new TableView();
+        numeros.setStyle("-fx-pref-width: 500px");
         numerosList = new Pseudoaleatorios().generar(cantidad, semilla);
         numeros.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -102,12 +192,21 @@ public class Histograma {
 
     private HBox crearFooter() {
         HBox footerHBox = new HBox();
+        footerHBox.setStyle("-fx-alignment: center; -fx-spacing: 20px; -fx-padding: 10px;");
         Button pruebaMedia, pruebaVarianza, pruebaUniformidad, pruebaIndependencia;
         pruebaMedia = new Button("Prueba de Medias");
-        pruebaMedia.setOnAction(event -> Pruebas.PruebaDeMedias(numerosList));
+        pruebaMedia.getStyleClass().add("info");
         pruebaVarianza = new Button("Prueba de Varianza");
         pruebaUniformidad = new Button("Prueba de Uniformidad");
         pruebaIndependencia = new Button("Prueba de independencia");
+
+        pruebaMedia.setOnAction(event -> Pruebas.PruebaDeMedias(numerosList));
+
+        pruebaMedia.getStyleClass().add("info");
+        pruebaVarianza.getStyleClass().add("info");
+        pruebaUniformidad.getStyleClass().add("info");
+        pruebaIndependencia.getStyleClass().add("info");
+
         footerHBox.getChildren().addAll(pruebaMedia, pruebaVarianza, pruebaUniformidad, pruebaIndependencia);
         return footerHBox;
     }
