@@ -11,7 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sample.MainForm;
-import sample.pseudoaleatorios;
+import sample.Pseudoaleatorios;
+import sample.Pseudoaleatorios;
 
 public class Histograma {
     private BorderPane histoParentContainer;
@@ -19,7 +20,7 @@ public class Histograma {
     private Scene mainScene;
     private Stage regresarStage;
 
-    public Histograma(Stage stage) {
+    public Histograma(Stage stage, int cantidad, Integer semilla) {
         histStage = stage;
         regresarStage = stage;
         CrearUI();
@@ -75,21 +76,21 @@ public class Histograma {
         TableView numeros = new TableView();
         numeros.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<Integer, pseudoaleatorios> periodoCol = new TableColumn<>("Periodo");
+        TableColumn<Integer, Pseudoaleatorios> periodoCol = new TableColumn<>("Periodo");
         periodoCol.setCellValueFactory(new PropertyValueFactory<>("periodo"));
 
-        TableColumn<String, pseudoaleatorios> xiCol = new TableColumn<>("Xi");
+        TableColumn<String, Pseudoaleatorios> xiCol = new TableColumn<>("Xi");
         xiCol.setCellValueFactory(new PropertyValueFactory<>("xi"));
 
-        TableColumn<Integer, pseudoaleatorios> xCol = new TableColumn<>("X");
+        TableColumn<Integer, Pseudoaleatorios> xCol = new TableColumn<>("X");
         xCol.setCellValueFactory(new PropertyValueFactory<>("x"));
 
-        TableColumn<Double, pseudoaleatorios> riCol = new TableColumn<>("Ri");
+        TableColumn<Double, Pseudoaleatorios> riCol = new TableColumn<>("Ri");
         riCol.setCellValueFactory(new PropertyValueFactory<>("ri"));
 
 
         numeros.getColumns().addAll(periodoCol, xiCol, xCol, riCol);
-        numeros.getItems().add(new pseudoaleatorios(0, "X0", 99, 0.1566));
+        numeros.setItems(new Pseudoaleatorios().generar());
         return numeros;
     }
 

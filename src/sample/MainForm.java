@@ -38,7 +38,17 @@ public class MainForm {
     }
 
     private void ValidarDatos(Stage stage) {
-        new Histograma(stage);
+        String cantidadTxt = quantityInputText.getText();
+        String semillaTxt = semillaInputText.getText();
+        try {
+            int semilla = Integer.parseInt(semillaTxt);
+            int cantidad = Integer.parseInt(cantidadTxt);
+            if(semilla % 2 != 0) {
+                new Histograma(stage, cantidad, semilla);
+            }
+        }catch (Exception e) {
+            System.out.println("Error" + e);
+        }
     }
 
 
