@@ -1,5 +1,6 @@
 package sample.Vistas;
 
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,16 +12,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sample.MainForm;
-import sample.Pseudoaleatorios;
+import sample.Pruebas;
 import sample.Pseudoaleatorios;
 
 public class Histograma {
+    private final int cantidad;
+    private final int semilla;
     private BorderPane histoParentContainer;
     private Stage histStage;
     private Scene mainScene;
     private Stage regresarStage;
+    private ObservableList<Pseudoaleatorios> numerosList;
 
-    public Histograma(Stage stage, int cantidad, Integer semilla) {
+    public Histograma(Stage stage, int cantidad, int semilla) {
+        this.cantidad = cantidad;
+        this.semilla = semilla;
         histStage = stage;
         regresarStage = stage;
         CrearUI();
@@ -72,8 +78,8 @@ public class Histograma {
     }
 
     private TableView crearTabla() {
-        //  Periodo  Xi      X        Ri
         TableView numeros = new TableView();
+        numerosList = new Pseudoaleatorios().generar(cantidad, semilla);
         numeros.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<Integer, Pseudoaleatorios> periodoCol = new TableColumn<>("Periodo");
@@ -90,7 +96,7 @@ public class Histograma {
 
 
         numeros.getColumns().addAll(periodoCol, xiCol, xCol, riCol);
-        numeros.setItems(new Pseudoaleatorios().generar());
+        numeros.setItems(numerosList);
         return numeros;
     }
 
@@ -98,6 +104,7 @@ public class Histograma {
         HBox footerHBox = new HBox();
         Button pruebaMedia, pruebaVarianza, pruebaUniformidad, pruebaIndependencia;
         pruebaMedia = new Button("Prueba de Medias");
+        pruebaMedia.setOnAction(event -> Pruebas.PruebaDeMedias(numerosList));
         pruebaVarianza = new Button("Prueba de Varianza");
         pruebaUniformidad = new Button("Prueba de Uniformidad");
         pruebaIndependencia = new Button("Prueba de independencia");

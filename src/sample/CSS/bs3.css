@@ -939,6 +939,14 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-max-width: infinity;
 }
 
+.my-form-label {
+    -fx-font-family: 'Roboto';
+    -fx-font-weight: bolder;
+    -fx-font-size: 14px;
+    -fx-text-alignment: center;
+    -fx-max-width: infinity;
+}
+
 #header-content {
     -fx-spacing: 330;
 }

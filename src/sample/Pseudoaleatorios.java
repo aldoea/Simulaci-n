@@ -25,23 +25,40 @@ public class Pseudoaleatorios {
     public double getRi() {
         return ri;
     }
-    
 
-    public ObservableList<Pseudoaleatorios> generar() {
+
+    public ObservableList<Pseudoaleatorios> generar(int cantidad, int semilla) {
         ObservableList<Pseudoaleatorios> lista = FXCollections.observableArrayList();
         Pseudoaleatorios paObj = null;
         try{
-            while (true){
+            int g = 0;
+            int bandera2 = cantidad;
+            while(cantidad>0) {
+                cantidad = cantidad / 2;
+                g += 1;
+            }
+            g = g + 2;
+            periodo = 0;
+            int bandera = 0;
+            int mod = (int) Math.pow(2,g);
+            int n = (int) Math.pow(2,g-2);
+            int a = 3;
+
+            while(bandera != semilla && periodo<=bandera2 && periodo!=n ){
                 paObj = new Pseudoaleatorios();
-                paObj.periodo = 0;
-                paObj.xi = "X0";
-                paObj.x = 99;
-                paObj.ri = 0.167;
+                if (periodo == 0) bandera = semilla;
+                paObj.periodo = periodo;
+                paObj.xi = "X"+periodo;
+                semilla = (a * semilla) % mod;
+                paObj.x = semilla;
+                ri = semilla / (mod - 1.0);
+                paObj.ri=ri;
+                periodo += 1;
                 lista.add(paObj);
-                break;
             }
         }catch (Exception e) {
-            System.err.println("An error happens" + e.toString());
+            System.err.println("An error happens " + e.toString());
+            throw e;
         }
         return lista;
     }
