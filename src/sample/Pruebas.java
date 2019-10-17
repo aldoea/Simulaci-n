@@ -1,10 +1,11 @@
 package sample;
 
 public class Pruebas {
-    public void datos(int totalDatos,float[] datos) {
-        float muestra[] = new float[100];
-        float ordenar[] = new float[100];
-        float mediana = 0, media = 0, varianza = 0, suma = 0, aux;
+    double mediana = 0, media = 0, varianza = 0, suma = 0, aux;
+
+    public void datos(int totalDatos,double[] datos) {
+        double muestra[] = new double[100];
+        double ordenar[] = new double[100];
         int c1, c2, nm, cal, va;
         nm = totalDatos;
         for (c1 = 0; c1 < nm; c1++) {
@@ -36,5 +37,6 @@ public class Pruebas {
             suma = suma + ((muestra[c1] - media) * (muestra[c1] - media));
         }
         varianza = suma / (nm - 1);
+        System.out.println(varianza);
     }
 }

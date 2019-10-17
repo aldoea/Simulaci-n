@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +20,8 @@ public class Main extends Application {
     private Label title;
     private TextField quantityInputText;
     private VBox uiVbox;
+    private Pruebas pruebas = new Pruebas();
+    private double[] numeros = new double[]{9,10,10,11,10,10};
     @Override
     public void start(Stage primaryStage) {
         panel = new BorderPane();
@@ -33,6 +36,10 @@ public class Main extends Application {
         primaryStage.setTitle("Generador números pseudoaleatorios");
         primaryStage.setScene(escena);
         primaryStage.show();
+        pruebas.datos(5,numeros);
+        System.out.println(pruebas.varianza);
+        System.out.println(pruebas.media);
+        System.out.println(pruebas.mediana);
     }
 
 
