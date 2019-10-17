@@ -961,6 +961,27 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-alignment: center;
 }
 
+#data-container {
+    -fx-background-color: transparent;
+    -fx-max-height: 400px;
+    -fx-alignment: top-center;
+}
+
+#table-data-box {
+    -fx-padding: 10px;
+    -fx-background-color: whitesmoke;
+    -fx-pref-width: 650px;
+    -fx-pref-height: 300px;
+    -fx-alignment: center;
+}
+
+#histo-box {
+    -fx-background-color: whitesmoke;
+    -fx-pref-width: 650px;
+    -fx-pref-height: 200px;
+    -fx-alignment: center;
+    -fx-padding: 10px;
+}
 .btn-regresar {
     -fx-background-image: url(/sample/Imagenes/Otras/left-arrow.png);
     -fx-background-color: transparent;

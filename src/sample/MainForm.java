@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import sample.Vistas.Histograma;
 
 public class MainForm {
-
+    private Boolean debug = true;
     private Scene escena;
     private BorderPane panel;
     private Button generarBtn;
@@ -48,16 +48,19 @@ public class MainForm {
     }
 
     private void ValidarDatos(Stage stage) {
-        String cantidadTxt = quantityInputText.getText();
-        String semillaTxt = semillaInputText.getText();
-        try {
-            int semilla = Integer.parseInt(semillaTxt);
-            int cantidad = Integer.parseInt(cantidadTxt);
-            if(semilla % 2 != 0) {
-                new Histograma(stage, cantidad, semilla);
+        if(debug) new Histograma(stage, 50, 3);
+        else {
+            String cantidadTxt = quantityInputText.getText();
+            String semillaTxt = semillaInputText.getText();
+            try {
+                int semilla = Integer.parseInt(semillaTxt);
+                int cantidad = Integer.parseInt(cantidadTxt);
+                if (semilla % 2 != 0) {
+                    new Histograma(stage, cantidad, semilla);
+                }
+            } catch (Exception e) {
+                System.out.println("Error" + e);
             }
-        }catch (Exception e) {
-            System.out.println("Error" + e);
         }
     }
 
