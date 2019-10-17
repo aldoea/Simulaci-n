@@ -29,6 +29,7 @@ public class Main extends Application {
         quantityInputText = new TextField();
         quantityInputText.setPromptText("Introduce la cantidad de números a generar");
         generarBtn = new Button("Generar");
+        generarBtn.setOnAction(event -> generar());
         uiVbox = new VBox();
         uiVbox.getChildren().addAll(title,quantityInputText,generarBtn);
         panel.setCenter(uiVbox);
@@ -41,6 +42,10 @@ public class Main extends Application {
         System.out.println(pruebas.media);
         System.out.println(pruebas.mediana);
     }
+
+    public void generar(){
+        new Tabla(numeros);
+    };
 
 
     public static void main(String[] args) {
