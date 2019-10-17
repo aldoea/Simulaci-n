@@ -6,9 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 
 public class Pruebas {
-    double mediana = 0, media = 0, varianza = 0, suma = 0, aux;
     final static double confianza = .95;
     static double alfa = 1-confianza;
 
@@ -36,13 +36,45 @@ public class Pruebas {
         ministage.show();
     }
 
-    public void datos(int totalDatos,double[] datos) {
-        double muestra[] = new double[100];
-        double ordenar[] = new double[100];
+    public static void PruebaDeVarianza(ObservableList<Pseudoaleatorios> numeroList){
+
+        int n = numeroList.size();
+        double[] regreso = datos(n,numeroList);
+        ChiSquaredDistribution chi = new ChiSquaredDistribution((n-1));
+        Double limInf = (chi.inverseCumulativeProbability((alfa/2))/(12*(n-1)));
+        Double limSup = (chi.inverseCumulativeProbability((confianza/2))/(12*(n-1)));
+
+        Stage ministage = new Stage();
+        VBox panel = new VBox();
+        Label limitInfLabel, mriLabel, limitSupLabel,resultado;
+        mriLabel = new Label("σ^2ri: " + regreso[0]);
+        limitInfLabel = new Label("LIMri: " + limInf);
+        limitSupLabel = new Label("LSMri: " + limSup);
+
+        if(limInf<regreso[0] && regreso[0]<limSup){
+            resultado = new Label("los numeros pseudo siguen una varianza de: "+regreso[0]);
+        }else{
+            resultado = new Label("No cumplen con la varianza");
+        }
+
+        panel.getChildren().addAll(limitInfLabel, mriLabel, limitSupLabel,resultado);
+        panel.setStyle("-fx-padding: 30px; -fx-alignment: center; -fx-spacing: 25px;");
+        Scene escena = new Scene(panel, 400, 200);
+        ministage.setTitle("Resultados de pruebas de Varianza");
+        ministage.setScene(escena);
+        ministage.show();
+    }
+
+    public static double[] datos(int totalDatos,ObservableList<Pseudoaleatorios> datos) {
+        double regreso[] = new double[3];
+        double muestra[] = new double[totalDatos];
+        double ordenar[] = new double[totalDatos];
         int c1, c2, nm, cal, va;
+        double mediana = 0, media = 0, varianza = 0, aux;
+        double suma=0;
         nm = totalDatos;
         for (c1 = 0; c1 < nm; c1++) {
-            muestra[c1] = datos[c1];
+            muestra[c1] = datos.get(c1).getRi();
             ordenar[c1] = muestra[c1];
             suma = suma + muestra[c1];
         }
@@ -70,6 +102,11 @@ public class Pruebas {
             suma = suma + ((muestra[c1] - media) * (muestra[c1] - media));
         }
         varianza = suma / (nm - 1);
-        System.out.println(varianza);
+
+        regreso[0]=varianza;
+        regreso[1]=media;
+        regreso[2]=mediana;
+
+        return regreso;
     }
 }

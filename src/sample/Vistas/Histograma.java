@@ -106,6 +106,7 @@ public class Histograma {
         pruebaMedia = new Button("Prueba de Medias");
         pruebaMedia.setOnAction(event -> Pruebas.PruebaDeMedias(numerosList));
         pruebaVarianza = new Button("Prueba de Varianza");
+        pruebaVarianza.setOnAction(event -> Pruebas.PruebaDeVarianza(numerosList));
         pruebaUniformidad = new Button("Prueba de Uniformidad");
         pruebaIndependencia = new Button("Prueba de independencia");
         footerHBox.getChildren().addAll(pruebaMedia, pruebaVarianza, pruebaUniformidad, pruebaIndependencia);
