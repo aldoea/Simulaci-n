@@ -6,4 +6,6 @@ public class Tabla {
     public Tabla(double[] numeros) {
         this.numeros = numeros;
     }
+
+
 }
