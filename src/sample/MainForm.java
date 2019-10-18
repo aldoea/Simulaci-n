@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import sample.Vistas.Histograma;
 
 public class MainForm {
-    private Boolean debug = true;
+    private Boolean debug = false;
     private Scene escena;
     private BorderPane panel;
     private Button generarBtn;
@@ -48,7 +48,7 @@ public class MainForm {
     }
 
     private void ValidarDatos(Stage stage) {
-        if(debug) new Histograma(stage, 50, 3);
+        if(debug) new Histograma(stage, 100, 3);
         else {
             String cantidadTxt = quantityInputText.getText();
             String semillaTxt = semillaInputText.getText();

@@ -1,5 +1,6 @@
 package sample.Vistas;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -18,6 +19,7 @@ import sample.MainForm;
 import sample.Pruebas;
 import sample.Pseudoaleatorios;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Histograma {
@@ -28,6 +30,8 @@ public class Histograma {
     private Scene mainScene;
     private Stage regresarStage;
     private ObservableList<Pseudoaleatorios> numerosList;
+    private DecimalFormat formato1 = new DecimalFormat("#.0000");
+
 
     public Histograma(Stage stage, int cantidad, int semilla) {
         this.cantidad = cantidad;
@@ -106,26 +110,24 @@ public class Histograma {
         int m = (int) Math.sqrt(n);
         double intervalo = 1.0/m;
         double liminf = 0.0;
-        double limsup = intervalo;
-        ArrayList<ArrayList<Double>> group = new ArrayList<>();
+        double limsup = Double.parseDouble(formato1.format(intervalo));
+        int [] contadores = new int[m];
         Range[] rangeGroups = new Range[m];
 
         for (int i = 0; i < m; i++) {
             System.out.println(liminf + " " + limsup);
             rangeGroups[i] = new Range(liminf, limsup);
-            liminf = limsup + 0.0001;
-            limsup = limsup+intervalo;
+            liminf = Double.parseDouble(formato1.format(limsup));
+            limsup = Double.parseDouble(formato1.format(limsup+intervalo));
         }
-
         // Iterate numbers
         for (int i = 0; i < n; i++) {
             boolean checksum = false;
             double ri = numerosList.get(i).getRi();
             // Explore ranges
             for (int j = 0; j < m; j++) {
-                group.add(j, new ArrayList<Double>());
                 if(rangeGroups[j].contains(ri)) {
-                    group.get(j).add(ri);
+                    contadores[j]++;
                     checksum = true;
                     break;
                 }
@@ -137,7 +139,8 @@ public class Histograma {
         }
 
         for(int i = 0; i < m; i++) {
-            series.getData().add(new XYChart.Data(rangeGroups[i].toRangeString(), group.get(i).toArray().length));
+            System.out.println(contadores[i]);
+            series.getData().add(new XYChart.Data(rangeGroups[i].toRangeString(), contadores[i]));
         }
 
         barChart.getData().addAll(series);
@@ -157,11 +160,14 @@ public class Histograma {
         }
 
         public boolean contains(double number){
-            return (number >= low && number <= high);
+            return (number >= low && number < high);
+        }
+        public void setHigh(double high){
+            this.high = high;
         }
 
         public String toRangeString() {
-            String rangeString = low + "-" + high;
+            String rangeString = formato1.format(low) + "-" + formato1.format(high);
             return rangeString;
         }
     }
