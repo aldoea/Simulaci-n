@@ -200,11 +200,12 @@ public class Histograma {
         pruebaMedia = new Button("Prueba de Medias");
         pruebaMedia.getStyleClass().add("info");
         pruebaVarianza = new Button("Prueba de Varianza");
-        pruebaVarianza.setOnAction(event -> Pruebas.PruebaDeVarianza(numerosList));
         pruebaUniformidad = new Button("Prueba de Uniformidad");
         pruebaIndependencia = new Button("Prueba de independencia");
 
         pruebaMedia.setOnAction(event -> Pruebas.PruebaDeMedias(numerosList));
+        pruebaVarianza.setOnAction(event -> Pruebas.PruebaDeVarianza(numerosList));
+        pruebaIndependencia.setOnAction(event -> Pruebas.myPruebaDeIndependencia(numerosList));
 
         pruebaMedia.getStyleClass().add("info");
         pruebaVarianza.getStyleClass().add("info");

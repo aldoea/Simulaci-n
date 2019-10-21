@@ -8,6 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import sample.Anita.Independencia;
+
+import java.util.ArrayList;
 
 public class Pruebas {
     final static double confianza = .95;
@@ -80,7 +83,65 @@ public class Pruebas {
         ministage.show();
     }
 
-    //public static void prueba
+    public static void pruebaDeIndependencia(ObservableList<Pseudoaleatorios> numeroList) {
+        new Independencia(numeroList);
+    }
+
+    public static void myPruebaDeIndependencia(ObservableList<Pseudoaleatorios> numeroLsit) {
+        //Creamos una lista para guardar los ceros y unos.
+        ArrayList<Integer> bits = new ArrayList<>();
+        int i, corridas, dato;
+        double  media, varianza, z;
+        //Revisa si cada dato actual es menor al dato anterior.
+        //Si es así, se guarda un 0, de lo contrario, se guarda un 1
+        for (i=1; i<numeroLsit.size(); i++){
+            if (numeroLsit.get(i).getRi()<=numeroLsit.get(i-1).getRi()){
+                bits.add(0);
+            }
+            else{
+                bits.add(1);
+            }
+        }
+
+        //Imprimimos la cadena de ceros y unos
+        for (i=0; i<bits.size(); i++){
+            System.out.print(bits.get(i));
+        }
+
+        //Contamos las corridas.
+        corridas = 1;
+        //Comenzamos observando el primer dígito
+        dato= bits.get(0);
+        //Comparamos cada dígito con el observado, cuando cambia es
+        //una nueva corrida
+        for (i=1; i<bits.size(); i++){
+            if (bits.get(i) != dato){
+                corridas++;
+                dato = bits.get(i);
+            }
+        }
+        System.out.println("Corridas " + corridas);
+
+        //Aplicamos las fórmulas para media, varianza y Z.
+        media = (2*numeroLsit.size()-1)/ (double)3;
+        System.out.println("Media: " +media);
+        varianza = (16*numeroLsit.size()-29)/(double) 90;
+        System.out.println("Varianza: " + varianza);
+        z= Math.abs((corridas-media)/Math.sqrt(varianza));
+        System.out.println("Z=" + z);
+
+        //Obtenemos el valor Z de la tabla de distribución normal
+        NormalDistribution normal = new NormalDistribution();
+        double  zn =  normal.inverseCumulativeProbability(1-alfa/2);
+        //Comparamos: si es mayor mi valor Z al de la tabla, no pasa
+        if (z < zn){
+            System.out.println("No se rechaza que son independientes. " );
+        }
+        else{
+            System.out.println("No Pasa la prueba de corridas");
+        }
+
+    }
 
     public static double[] datos(int totalDatos,ObservableList<Pseudoaleatorios> datos) {
         double regreso[] = new double[3];
