@@ -1,6 +1,5 @@
 package sample.Vistas;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -20,7 +19,6 @@ import sample.Pruebas;
 import sample.Pseudoaleatorios;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class Histograma {
     private final int cantidad;
@@ -103,7 +101,7 @@ public class Histograma {
         yAxis.setLabel("Population");
 
         XYChart.Series series = new XYChart.Series();
-        series.setName("Histograma");
+        series.setName("Cantidad");
 
         int n = numerosList.size();
         ObservableList banderaList = numerosList;
@@ -115,7 +113,7 @@ public class Histograma {
         Range[] rangeGroups = new Range[m];
 
         for (int i = 0; i < m; i++) {
-            System.out.println(liminf + " " + limsup);
+            //System.out.println(liminf + " " + limsup);
             rangeGroups[i] = new Range(liminf, limsup);
             liminf = Double.parseDouble(formato1.format(limsup));
             limsup = Double.parseDouble(formato1.format(limsup+intervalo));
@@ -139,7 +137,6 @@ public class Histograma {
         }
 
         for(int i = 0; i < m; i++) {
-            System.out.println(contadores[i]);
             series.getData().add(new XYChart.Data(rangeGroups[i].toRangeString(), contadores[i]));
         }
 

@@ -4,9 +4,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class Pruebas {
     final static double confianza = .95;
@@ -14,10 +15,12 @@ public class Pruebas {
 
     public static void PruebaDeMedias(ObservableList<Pseudoaleatorios> numerosList) {
         int n = numerosList.size();
+        boolean conclusion;
+        String conclusionTxt;
         NormalDistribution normal = new NormalDistribution();
         Stage ministage = new Stage();
         VBox panel = new VBox();
-        Label limitInfLabel, mriLabel, limitSupLabel;
+        Label limitInfLabel, mriLabel, limitSupLabel, conclusionLabel;
         Double mri = 0.0;
         Double limInf = (0.5) - (normal.inverseCumulativeProbability(1-alfa/2) * (1/Math.sqrt(12*n)));
         Double limSup = (0.5) + (normal.inverseCumulativeProbability(1-alfa/2) * (1/Math.sqrt(12*n)));
@@ -25,10 +28,20 @@ public class Pruebas {
             mri = mri + numerosList.get(i).getRi();
         }
         mri = mri/n;
+        conclusion = (limInf <= mri) && (mri <= limSup);
         mriLabel = new Label("Mri: " + mri);
         limitInfLabel = new Label("LIMri: " + limInf);
         limitSupLabel = new Label("LSMri: " + limSup);
-        panel.getChildren().addAll(limitInfLabel, mriLabel, limitSupLabel);
+        if(conclusion) {
+            conclusionTxt = "Los números cumplen con la media";
+            conclusionLabel = new Label("Conclusión: " + conclusionTxt);
+            conclusionLabel.setTextFill(Color.web("#29ba30"));
+        }else {
+            conclusionTxt = "Los números no cumplen con la media";
+            conclusionLabel = new Label("Conclusión: " + conclusionTxt);
+            conclusionLabel.setTextFill(Color.web("#ff0808"));
+        }
+        panel.getChildren().addAll(limitInfLabel, mriLabel, limitSupLabel, conclusionLabel);
         panel.setStyle("-fx-padding: 30px; -fx-alignment: center; -fx-spacing: 25px;");
         Scene escena = new Scene(panel, 400, 200);
         ministage.setTitle("Resultados de pruebas de Medias");
@@ -53,8 +66,10 @@ public class Pruebas {
 
         if(limInf<regreso[0] && regreso[0]<limSup){
             resultado = new Label("los numeros pseudo siguen una varianza de: "+regreso[0]);
+            resultado.setTextFill(Color.web("#29ba30"));
         }else{
             resultado = new Label("No cumplen con la varianza");
+            resultado.setTextFill(Color.web("#ff0808"));
         }
 
         panel.getChildren().addAll(limitInfLabel, mriLabel, limitSupLabel,resultado);
@@ -64,6 +79,8 @@ public class Pruebas {
         ministage.setScene(escena);
         ministage.show();
     }
+
+    //public static void prueba
 
     public static double[] datos(int totalDatos,ObservableList<Pseudoaleatorios> datos) {
         double regreso[] = new double[3];
